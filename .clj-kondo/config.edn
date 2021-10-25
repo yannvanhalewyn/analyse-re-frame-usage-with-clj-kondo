@@ -1,0 +1,3 @@
+{:output {:analysis {:keywords true}
+          :format :edn}
+ :hooks {:analyze-call {re-frame.core/subscribe hooks.re-frame2/register-subscribe-call}}}
