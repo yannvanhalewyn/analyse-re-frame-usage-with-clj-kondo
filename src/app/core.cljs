@@ -3,3 +3,4 @@
 
 (rf/subscribe [:my-sub])
 (rf/reg-sub :my-sub (fn []))
+(rf/dispatch [:event])
