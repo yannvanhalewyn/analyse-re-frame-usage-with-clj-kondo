@@ -1,1 +1,2 @@
-{:deps {clj-kondo/clj-kondo {:mvn/version "2021.10.19"}}}
+{:paths ["src" "scripts"]
+ :deps {clj-kondo/clj-kondo {:mvn/version "2021.10.19"}}}

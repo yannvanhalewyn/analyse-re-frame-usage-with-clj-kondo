@@ -1,6 +1,9 @@
 (ns app.core
-  (:require [re-frame.core :as rf]))
+  (:require [re-frame.core :as rf]
+            [app.db :as db]))
 
-(rf/subscribe [:my-sub])
-(rf/reg-sub :my-sub (fn []))
-(rf/dispatch [:event])
+(rf/subscribe [::db/existing-sub])
+(rf/dispatch [::db/existing-event])
+
+(rf/subscribe [::undefined-sub])
+(rf/dispatch [::undefined-event])
