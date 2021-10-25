@@ -41,6 +41,11 @@ long as the shape (e.g:`(subscribe [key arg])`) stays the same. If you have a
 different call structure you will need to edit the hooks to annotate the keyword
 correctly.
 
+For your own reg-xx functions, follow the comments. Two things need to be done:
+
+1. Add a `:lint-as` entry
+2. Add your custom reg-xx symbol to the correct set in the `get-xxx-` functions.
+
 #### Using with [Babashka](https://github.com/babashka/babashka)
 
 A small tweak needs to be done to lint from babashka. You need to call `clj-kondo.main/run!` from a pod. See: https://github.com/babashka/pod-registry/blob/master/examples/clj-kondo.clj

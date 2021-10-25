@@ -26,6 +26,10 @@
     :keywords
     [{:name \"some-key\"
       :reg 're-frame.core/subscribe}]}}
+
+  Note: Clj-Kondo already has built in support for annotating registering
+  subscriptions and handlers. We only need to add hooks for the subscribe and
+  dispatch calls.
   "
   [register-as]
   (fn [{:keys [node]}]
