@@ -57,3 +57,10 @@
       (find-incorrect-usages "Registering unused event"
        (get-registered-event-keys analysis-keywords)
        (get-used-event-keys analysis-keywords))))))
+
+(main)
+;; =>
+;; src/app/core.cljs:8 Call to unregistered subscription :app.core/undefined-sub
+;; src/app/core.cljs:9 Dispatching unregistered event :app.core/undefined-event
+;; src/app/db.cljs:8 Registering unused subscription :app.db/orphaned-sub
+;; src/app/db.cljs:7 Registering unused event :app.db/orphaned-event
