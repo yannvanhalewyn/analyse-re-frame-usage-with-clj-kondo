@@ -1,6 +1,9 @@
 (ns lint
   (:require [clj-kondo.core :as clj-kondo]))
 
+(defn- safe-name [x]
+  (when x (name x)))
+
 (defn- analyze-code [paths]
   (clj-kondo/run!
    {:lint paths
@@ -22,7 +25,7 @@
                                                          're-frame.core/reg-event-fx}))
 
 (defn- ->keyword [analysis-keyword]
-  (keyword (name (:ns analysis-keyword)) (:name analysis-keyword)))
+  (keyword (safe-name (:ns analysis-keyword)) (:name analysis-keyword)))
 
 (defn- find-incorrect-usages [reason subset superset]
   (->> subset
