@@ -38,7 +38,7 @@ src/app/db.cljs:7 Registering unused event :app.db/orphaned-event
 
 ## Using this script
 
-> This project is not intended to be a library (yet). It's informational, and
+> This project is not intended to be a library (yet?). It's informational, and
 > intended to be copied and modified for your own use cases.
 
 But to get this example working clone the repo, cd into the directory and then:
@@ -62,7 +62,7 @@ https://github.com/babashka/pod-registry/blob/master/examples/clj-kondo.clj
 
 You need to make this changes to the script:
 
-1) Require babashka pods
+1) **Require babashka pods**
 
 Remove the existing namespace declaration (along with the kondo require) and
 replace it with:
@@ -72,7 +72,7 @@ replace it with:
   (:require [babashka.pods :as pods]))
 ```
 
-2) Require the Clj-Kondo pod
+2) **Require the Clj-Kondo pod**
 
 Add these lines at the top of the file after the NS declaration:
 
@@ -82,7 +82,7 @@ Add these lines at the top of the file after the NS declaration:
 (require '[pod.borkdude.clj-kondo :as clj-kondo])
 ```
 
-3) Run the script using Babashka!
+3) **Run the script using Babashka!**
 
 
 ``` clojure
@@ -96,16 +96,35 @@ And you should get similar results.
 ## Modifying this script
 
 You might be using your own custom dispatch, subscribe, reg-xx functions that
-wrap re-frame. If you do so you need to make some changes:
+wrap re-frame. If you do so you need to make some changes. Annotating re-frame
+reg-xx functions is already supported in kondo, this repo contains hooks to
+annotate subscribe and dispatch calls. Both hooks work a bit differently so
+different changes are required:
 
-Simply change the hooks defined
-[here](https://github.com/yannvanhalewyn/analyze-re-frame-usage-with-clj-kondo/blob/master/scripts/analyse_re_frame.clj#L16)
-with your own subscribe / dispatch functions. You can add multiple variants, as
-long as the shape (e.g:`(subscribe [key arg])`) stays the same. If you have a
-different call structure you will need to edit the hooks to annotate the keyword
-correctly.
+**Your own dispatch / subscribe calls**
 
-For your own reg-xx functions, follow the comments. Two things need to be done:
+1. Add an entry to the hooks defined
+[here](https://github.com/yannvanhalewyn/analyze-re-frame-usage-with-clj-kondo/blob/master/scripts/analyse_re_frame.clj#L14)
+following the same pattern. This will annotate the keyword used by the
+subscription. You can add as many variants as you like, as long as the shape
+(e.g:`(subscribe [key & args])`) stays the same. If it's not the same structure
+you will need to edit the hooks to annotate the keyword correctly.
 
-1. Add a `:lint-as` entry
-2. Add your custom reg-xx symbol to the correct set in the `get-xxx-` functions.
+You could get the same result with adding a `:lint-as` entry for these as well.
+
+**Your own reg-sub / reg-event**
+
+For your own reg-xx functions, two things need to be done:
+
+1. Add a `:lint-as` entry in the Kondo config.
+2. Add your custom symbol to the correct set in the filter functions [here](https://github.com/yannvanhalewyn/analyze-re-frame-usage-with-clj-kondo/blob/master/scripts/analyse_re_frame.clj#L26)
+
+This is needed because the annotation will have your own custom symbol (that's
+the behavior of the built-in re-frame hooks) and the script needs to know what
+kind of annotation it is.
+
+## Make this into a library / linter?
+
+If you'd like to see this packaged in a library or custom linter of some sorts,
+feel free to show this interest in the form of a Github Issue or post in the
+#clj-kondo Slack channel.

@@ -9,7 +9,7 @@
    {:lint paths
     :config
     {:output {:analysis {:keywords true}}
-     ;; Here are some examples on how to add your own register fns
+     ;; Here are some examples on how to add your own reg-event fns
      :lint-as '{app.db/reg-event-db re-frame.core/reg-event-db}
      :hooks {:analyze-call
              ;; See .clj-kondo/hooks/re_frame2.clj for hook implementations
