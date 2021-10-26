@@ -1,4 +1,4 @@
-(ns lint
+(ns analyse-re-frame
   (:require [clj-kondo.core :as clj-kondo]))
 
 (defn- safe-name [x]
