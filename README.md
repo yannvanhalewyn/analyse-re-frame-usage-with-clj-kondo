@@ -46,7 +46,7 @@ But to get this example working clone the repo, cd into the directory and then:
 **Using from JVM Clojure**  _💡Easy and quick_
 
 ``` sh
-clj -m analyse-re-frame
+clj -M -m analyse-re-frame
 ```
 
 This should run the `-main` function in `scripts/analyse_re_frame.clj` and print
