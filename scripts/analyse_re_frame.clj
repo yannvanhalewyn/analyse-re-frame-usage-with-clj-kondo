@@ -46,7 +46,7 @@
                      (:reason incorrect-usage)
                      (->keyword incorrect-usage)))))
 
-(defn main []
+(defn -main [& args]
   (let [result (analyze-code ["src"])
         analysis-keywords (get-in result [:analysis :keywords])]
     (report-issues

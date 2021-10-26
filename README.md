@@ -1,7 +1,8 @@
-### Analysing re-frame subscriptions and event keywords using Clj-Kondo
+# Analysing re-frame subscriptions using Clj-Kondo
 
 This is a simple project to demonstrate and give the boilerplate for how to
-analyse re-frame keywords in your codebase. This implementation prints out 4 types of warnings:
+analyse re-frame keywords in your codebase. This implementation prints out 4
+types of warnings:
 
 - A subscription is used but never registered
 - A subscription is registered but never used
@@ -13,14 +14,16 @@ dynamic uses of subscribing and dispatching will not be caught.
 
 ```clojure
 (let [event-vec [:do-something!]]
+  ;; Cannot extract the event keyword from the `event-vec` symbol
   (rf/dispatch event-vec)) 
-;; Cannot extract the event keyword from the `event-vec` symbol
 ```
 
 There are two parts to this implementation:
 
-- Some [.clj-kondo/hooks](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/.clj-kondo/hooks/re_frame2.clj) to annotate keywords in the codebase when they are used by re-frame.
-- A [script](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/scripts/lint.clj) using the analysis output of Kondo to match and print the warnings.
+- Some [.clj-kondo/hooks](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/.clj-kondo/hooks/re_frame2.clj)
+  to annotate keywords in the codebase when they are used by re-frame.
+- A [script.clj](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/scripts/lint.clj)
+  using the analysis output of Kondo to match and print the warnings.
 
 Here's output when linting the bit of code in the src directory:
 
@@ -31,11 +34,69 @@ src/app/db.cljs:8 Registering unused subscription :app.db/orphaned-sub
 src/app/db.cljs:7 Registering unused event :app.db/orphaned-event
 ```
 
+---
 
-#### If you use your own re-frame calls
+## Using this script
+
+> This project is not intended to be a library (yet). It's informational, and
+> intended to be copied and modified for your own use cases.
+
+But to get this example working clone the repo, cd into the directory and then:
+
+**Using from JVM Clojure**  _💡Easy and quick_
+
+``` sh
+clj -m analyse-re-frame
+```
+
+This should run the `-main` function in `scripts/analyse_re_frame.clj` and print
+out the example output as seen above.
+
+**Using as [Babashka](https://github.com/babashka/babashka) script** _👍 Recommended for you project_
+
+A small tweak needs to be done to lint from babashka. You need to call
+`clj-kondo.main/run!` from a pod. See:
+https://github.com/babashka/pod-registry/blob/master/examples/clj-kondo.clj
+
+You need to make this changes to the script:
+
+1. Require babashka pods
+
+Remove the existing namespace declaration (along with the kondo require) and
+replace it with:
+
+```clojure
+(ns analyse-re-frame
+  (:require [babashka.pods :as pods]))
+```
+
+2. Require the Clj-Kondo pod
+
+Add these lines at the top of the file after the NS declaration:
+
+```clojure
+;; Replace the version with latest or whatever version you want to use.
+(pods/load-pod 'clj-kondo/clj-kondo "2021.10.19") 
+(require '[pod.borkdude.clj-kondo :as clj-kondo])
+```
+
+3. Run the script using Babashka!
+
+``` clojure
+bb --classpath "scripts" -f scripts/analyse_re_frame.clj -m analyse-re-frame/-main
+```
+
+And you should get similar results.
+
+---
+
+## Modifying this script
+
+You might be using your own custom dispatch, subscribe, reg-xx functions that
+wrap re-frame. If you do so you need to make some changes:
 
 Simply change the hooks defined
-[here](https://github.com/yannvanhalewyn/analyze-re-frame-usage-with-clj-kondo/blob/master/scripts/lint.clj)
+[here](https://github.com/yannvanhalewyn/analyze-re-frame-usage-with-clj-kondo/blob/master/scripts/analyse_re_frame.clj#L16)
 with your own subscribe / dispatch functions. You can add multiple variants, as
 long as the shape (e.g:`(subscribe [key arg])`) stays the same. If you have a
 different call structure you will need to edit the hooks to annotate the keyword
@@ -45,7 +106,3 @@ For your own reg-xx functions, follow the comments. Two things need to be done:
 
 1. Add a `:lint-as` entry
 2. Add your custom reg-xx symbol to the correct set in the `get-xxx-` functions.
-
-#### Using with [Babashka](https://github.com/babashka/babashka)
-
-A small tweak needs to be done to lint from babashka. You need to call `clj-kondo.main/run!` from a pod. See: https://github.com/babashka/pod-registry/blob/master/examples/clj-kondo.clj
