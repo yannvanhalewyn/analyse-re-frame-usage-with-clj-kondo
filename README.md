@@ -43,7 +43,8 @@ src/app/db.cljs:7 Registering unused event :app.db/orphaned-event
 
 But to get this example working clone the repo, cd into the directory and then:
 
-**Using from JVM Clojure**  _💡Easy and quick_
+### Using from JVM Clojure  
+_💡Easy and quick_
 
 ``` sh
 clj -M -m analyse-re-frame
@@ -52,7 +53,8 @@ clj -M -m analyse-re-frame
 This should run the `-main` function in `scripts/analyse_re_frame.clj` and print
 out the example output as seen above.
 
-**Using as [Babashka](https://github.com/babashka/babashka) script** _👍 Recommended for you project_
+### Using as [Babashka](https://github.com/babashka/babashka) script 
+_👍 Recommended for you project_
 
 A small tweak needs to be done to lint from babashka. You need to call
 `clj-kondo.main/run!` from a pod. See:
@@ -60,7 +62,7 @@ https://github.com/babashka/pod-registry/blob/master/examples/clj-kondo.clj
 
 You need to make this changes to the script:
 
-1. Require babashka pods
+1) Require babashka pods
 
 Remove the existing namespace declaration (along with the kondo require) and
 replace it with:
@@ -70,7 +72,7 @@ replace it with:
   (:require [babashka.pods :as pods]))
 ```
 
-2. Require the Clj-Kondo pod
+2) Require the Clj-Kondo pod
 
 Add these lines at the top of the file after the NS declaration:
 
@@ -80,7 +82,8 @@ Add these lines at the top of the file after the NS declaration:
 (require '[pod.borkdude.clj-kondo :as clj-kondo])
 ```
 
-3. Run the script using Babashka!
+3) Run the script using Babashka!
+
 
 ``` clojure
 bb --classpath "scripts" -f scripts/analyse_re_frame.clj -m analyse-re-frame/-main
