@@ -22,7 +22,7 @@ There are two parts to this implementation:
 
 - Some [.clj-kondo/hooks](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/.clj-kondo/hooks/re_frame2.clj)
   to annotate keywords in the codebase when they are used by re-frame.
-- A [script.clj](https://github.com/yannvanhalewyn/kondo-register-keyword/blob/master/scripts/lint.clj)
+- A [script.clj](https://github.com/yannvanhalewyn/analyse-re-frame-usage-with-clj-kondo/blob/master/scripts/analyse_re_frame.clj)
   using the analysis output of Kondo to match and print the warnings.
 
 Here's output when linting the bit of code in the src directory:
